@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "940916363300",
+    "project_id": "seedevs-8dadc",
+    "storage_bucket": "seedevs-8dadc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:940916363300:android:70c3c5e69568be1bf748b1",
+        "android_client_info": {
+          "package_name": "com.next.data.saief.brahim"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAjGci23f1Oz5ypJAFuRrZ9SpMQEynF4XE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
