@@ -7,6 +7,7 @@ class AppTheme {
   static const Color secondary = Color(0xff1864D3);
   static const Color accent = Color(0xffF07F19);
   static const Color base = Color(0xffA2ABBC);
+  static const Color bgColor = Color(0xffF3F6FF);
 
   // ux colors
   static const Color dark = Color(0xff332D2D);

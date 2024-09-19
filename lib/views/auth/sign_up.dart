@@ -1,206 +1,273 @@
-// import 'package:flutkit/full_apps/animations/rental_service/controllers/register_controller.dart';
-// import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
-//
-// class RegisterScreen extends StatefulWidget {
-//   const RegisterScreen({Key? key}) : super(key: key);
-//
-//   @override
-//   _RegisterScreenState createState() => _RegisterScreenState();
-// }
-//
-// class _RegisterScreenState extends State<RegisterScreen> {
-//   late ThemeData theme;
-//   late RegisterController controller;
-//   late OutlineInputBorder outlineInputBorder;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     theme = AppTheme.rentalServiceTheme;
-//     controller = RegisterController();
-//     outlineInputBorder = OutlineInputBorder(
-//       borderRadius: BorderRadius.all(Radius.circular(8)),
-//       borderSide: BorderSide(
-//         color: Colors.transparent,
-//       ),
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return GetBuilder<RegisterController>(
-//         init: controller,
-//         tag: 'register_controller',
-//         // theme: theme,
-//         builder: (controller) {
-//           return Scaffold(
-//             body: Padding(
-//               padding: MySpacing.fromLTRB(
-//                   20, MySpacing.safeAreaTop(context) + 20, 20, 20),
-//               child: Center(
-//                 child: Column(
-//                   mainAxisAlignment: MainAxisAlignment.center,
-//                   children: [
-//                     MyText.headlineLarge(
-//                       "Create account",
-//                       fontWeight: 700,
-//                     ),
-//                     MyText.bodyLarge(
-//                       "Sign up to new account",
-//                       fontWeight: 600,
-//                     ),
-//                     MySpacing.height(40),
-//                     registerForm(),
-//                     MySpacing.height(20),
-//                     registerBtn(),
-//                     MySpacing.height(20),
-//                     loginBtn(),
-//                   ],
-//                 ),
-//               ),
-//             ),
-//           );
-//         });
-//   }
-//
-//   Widget registerForm() {
-//     return Form(
-//       key: controller.formKey,
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           nameField(),
-//           MySpacing.height(20),
-//           emailField(),
-//           MySpacing.height(20),
-//           passwordField(),
-//         ],
-//       ),
-//     );
-//   }
-//
-//   Widget nameField() {
-//     return TextFormField(
-//       style: MyTextStyle.bodyMedium(),
-//       keyboardType: TextInputType.text,
-//       decoration: InputDecoration(
-//           floatingLabelBehavior: FloatingLabelBehavior.never,
-//           isDense: true,
-//           filled: true,
-//           hintText: "Full Name",
-//           enabledBorder: outlineInputBorder,
-//           focusedBorder: outlineInputBorder,
-//           border: outlineInputBorder,
-//           prefixIcon: Icon(Icons.person),
-//           contentPadding: MySpacing.all(16),
-//           hintStyle: MyTextStyle.bodyMedium(xMuted: true),
-//           isCollapsed: true),
-//       maxLines: 1,
-//       controller: controller.nameController,
-//       validator: controller.validateName,
-//       cursorColor: theme.colorScheme.onBackground,
-//     );
-//   }
-//
-//   Widget emailField() {
-//     return TextFormField(
-//       style: MyTextStyle.bodyMedium(),
-//       keyboardType: TextInputType.text,
-//       decoration: InputDecoration(
-//           floatingLabelBehavior: FloatingLabelBehavior.never,
-//           isDense: true,
-//           filled: true,
-//           hintText: "Email Address",
-//           enabledBorder: outlineInputBorder,
-//           focusedBorder: outlineInputBorder,
-//           border: outlineInputBorder,
-//           prefixIcon: Icon(Icons.person),
-//           contentPadding: MySpacing.all(16),
-//           hintStyle: MyTextStyle.bodyMedium(xMuted: true),
-//           isCollapsed: true),
-//       maxLines: 1,
-//       controller: controller.emailController,
-//       validator: controller.validateEmail,
-//       cursorColor: theme.colorScheme.onBackground,
-//     );
-//   }
-//
-//   Widget passwordField() {
-//     return TextFormField(
-//       style: MyTextStyle.bodyMedium(),
-//       keyboardType: TextInputType.text,
-//       obscureText: controller.enable ? false : true,
-//       decoration: InputDecoration(
-//           floatingLabelBehavior: FloatingLabelBehavior.never,
-//           isDense: true,
-//           filled: true,
-//           hintText: "Password",
-//           enabledBorder: outlineInputBorder,
-//           focusedBorder: outlineInputBorder,
-//           border: outlineInputBorder,
-//           prefixIcon: Icon(Icons.lock),
-//           suffixIcon: InkWell(
-//               onTap: () {
-//                 controller.toggle();
-//               },
-//               child: Icon(
-//                   controller.enable ? Icons.visibility_off : Icons.visibility)),
-//           contentPadding: MySpacing.all(16),
-//           hintStyle: MyTextStyle.bodyMedium(xMuted: true),
-//           isCollapsed: true),
-//       maxLines: 1,
-//       controller: controller.passwordController,
-//       validator: controller.validatePassword,
-//       cursorColor: theme.colorScheme.onBackground,
-//     );
-//   }
-//
-//   Widget registerBtn() {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         MyText.headlineLarge(
-//           "Create",
-//           fontWeight: 700,
-//         ),
-//         MySpacing.width(20),
-//         MyButton(
-//           onPressed: () {
-//             controller.register();
-//           },
-//           padding: MySpacing.y(12),
-//           elevation: 0,
-//           borderRadiusAll: Constant.buttonRadius.xs,
-//           child: Icon(
-//             Icons.keyboard_arrow_right,
-//             color: theme.colorScheme.onPrimary,
-//             size: 24,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-//
-//   Widget loginBtn() {
-//     return Row(
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         MyText.bodySmall(
-//           "Already have an account?",
-//         ),
-//         MyButton.text(
-//           onPressed: () {
-//             controller.goToLoginScreen();
-//           },
-//           padding: MySpacing.y(8),
-//           child: MyText.bodySmall(
-//             "Sign In",
-//             color: theme.colorScheme.primary,
-//             decoration: TextDecoration.underline,
-//           ),
-//         ),
-//       ],
-//     );
-//   }
-// }
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+import 'package:next_data_saief_brahim/controllers/auth_controller.dart';
+import 'package:next_data_saief_brahim/helpers/app_theme.dart';
+import 'package:next_data_saief_brahim/helpers/images.dart';
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
+
+  @override
+  SignUpScreenState createState() => SignUpScreenState();
+}
+
+class SignUpScreenState extends State<SignUpScreen> {
+  late AuthController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    if (Get.isRegistered<AuthController>()) {
+      controller = Get.find<AuthController>();
+    } else {
+      controller = Get.put(AuthController());
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<AuthController>(
+        init: controller,
+        builder: (controller) {
+          return Scaffold(
+            backgroundColor: AppTheme.light,
+            body: SingleChildScrollView(
+              child: Padding(
+                padding:
+                    const EdgeInsets.only(top: 120, right: 20, bottom: 20, left: 20),
+                child: Column(
+                  children: [
+                    SvgPicture.asset(
+                      AppImages.logo,
+                      height: 90,
+                    ),
+                    const SizedBox(height: 40),
+                    const Text("Welcome to Next Data",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 22)),
+                    const SizedBox(height: 10),
+                    const Text("Create an account to get started",
+                        style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14,
+                            color: Colors.grey)),
+                    const SizedBox(height: 40),
+                    loginForm(),
+                    const SizedBox(height: 25),
+                    registerBtn(),
+                  ],
+                ),
+              ),
+            ),
+          );
+        });
+  }
+
+  Widget loginForm() {
+    return Form(
+      key: controller.signUpFormKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            "Name",
+            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+          ),
+          const SizedBox(height: 5),
+          nameField(),
+          const SizedBox(height: 20),
+          const Text(
+            "Email",
+            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+          ),
+          const SizedBox(height: 5),
+          emailField(),
+          const SizedBox(height: 20),
+          const Text(
+            "Password",
+            style: TextStyle(fontWeight: FontWeight.w400, fontSize: 16),
+          ),
+          const SizedBox(height: 5),
+          passwordField(),
+          const SizedBox(height: 10),
+          confirmPasswordField(),
+        ],
+      ),
+    );
+  }
+
+  Widget emailField() {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          isDense: true,
+          filled: true,
+          fillColor: Colors.white,
+          hintText: "email@email.com",
+          enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.base, width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(6))),
+          focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.base, width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(6))),
+          border: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.base, width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(6))),
+          contentPadding: const EdgeInsets.all(16),
+          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+          isCollapsed: true),
+      cursorColor: AppTheme.base,
+      maxLines: 1,
+      controller: controller.signUpEmailController,
+      validator: controller.validateEmail,
+    );
+  }
+
+  Widget nameField() {
+    return TextFormField(
+      keyboardType: TextInputType.text,
+      decoration: InputDecoration(
+          floatingLabelBehavior: FloatingLabelBehavior.never,
+          isDense: true,
+          filled: true,
+          fillColor: Colors.white,
+          hintText: "Name",
+          enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.base, width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(6))),
+          focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.base, width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(6))),
+          border: const OutlineInputBorder(
+              borderSide: BorderSide(color: AppTheme.base, width: 1),
+              borderRadius: BorderRadius.all(Radius.circular(6))),
+          contentPadding: const EdgeInsets.all(16),
+          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+          isCollapsed: true),
+      cursorColor: AppTheme.base,
+      maxLines: 1,
+      controller: controller.signUpNameController,
+      validator: controller.validateEmail,
+    );
+  }
+
+  Widget passwordField() {
+    return Obx(()=>
+      TextFormField(
+        keyboardType: TextInputType.text,
+        obscureText: controller.showPassword.value ? false : true,
+        decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            isDense: true,
+            filled: true,
+            fillColor: Colors.white,
+            hintText: "Create password",
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            border: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            suffixIcon: InkWell(
+                onTap: () {
+                  controller.onChangeShowPassword();
+                },
+                child: Icon(controller.showPassword.value
+                    ? Icons.visibility_off
+                    : Icons.visibility)),
+            contentPadding: const EdgeInsets.all(16),
+            hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+            isCollapsed: true),
+        cursorColor: AppTheme.base,
+        maxLines: 1,
+        controller: controller.signUpPasswordController,
+        validator: controller.validatePassword,
+      ),
+    );
+  }
+
+  Widget confirmPasswordField() {
+    return Obx(()=>
+       TextFormField(
+        keyboardType: TextInputType.text,
+        obscureText: controller.showPassword.value ? false : true,
+        decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            isDense: true,
+            filled: true,
+            fillColor: Colors.white,
+            hintText: "Create password",
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            border: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            suffixIcon: InkWell(
+                onTap: () {
+                  controller.onChangeShowPassword();
+                },
+                child: Icon(controller.showPassword.value
+                    ? Icons.visibility_off
+                    : Icons.visibility)),
+            contentPadding: const EdgeInsets.all(16),
+            hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+            isCollapsed: true),
+        cursorColor: AppTheme.base,
+        maxLines: 1,
+        controller: controller.signUpConfirmPasswordController,
+        validator: controller.validateConfirmPassword,
+      ),
+    );
+  }
+
+  Widget registerBtn() {
+    return Obx(()=>
+       Row(
+        children: [
+          Expanded(
+              child: ElevatedButton(
+            onPressed: () {
+              FocusScopeNode currentFocus =
+              FocusScope.of(Get.context!);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+              if (!controller.signUpLoading.value) {
+                controller.signUp();
+              }
+            },
+            style: const ButtonStyle(
+                padding:
+                    WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 16)),
+                backgroundColor: WidgetStatePropertyAll(AppTheme.primary),
+                elevation: WidgetStatePropertyAll(0),
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(6))))),
+            child: controller.signUpLoading.value
+                ? const SizedBox(
+                    height: 22.0,
+                    width: 22.0,
+                    child: CircularProgressIndicator(color: AppTheme.onPrimary),
+                  )
+                : const Text(
+                    "Sign Up",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: AppTheme.onPrimary),
+                  ),
+          )),
+        ],
+      ),
+    );
+  }
+}

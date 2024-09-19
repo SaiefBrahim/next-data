@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
-import 'package:next_data_saief_brahim/controllers/login_controller.dart';
+import 'package:next_data_saief_brahim/controllers/auth_controller.dart';
 import 'package:next_data_saief_brahim/helpers/app_theme.dart';
 import 'package:next_data_saief_brahim/helpers/images.dart';
+import 'package:next_data_saief_brahim/views/auth/sign_up.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -13,13 +14,17 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  late LogInController controller;
+  late AuthController controller;
   late OutlineInputBorder outlineInputBorder;
 
   @override
   void initState() {
     super.initState();
-    controller = Get.put(LogInController());
+    if (Get.isRegistered<AuthController>()) {
+      controller = Get.find<AuthController>();
+    } else {
+      controller = Get.put(AuthController());
+    }
     outlineInputBorder = const OutlineInputBorder(
       borderRadius: BorderRadius.all(Radius.circular(8)),
       borderSide: BorderSide(
@@ -30,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<LogInController>(
+    return GetBuilder<AuthController>(
         init: controller,
         builder: (controller) {
           return Scaffold(
@@ -126,67 +131,87 @@ class _LoginScreenState extends State<LoginScreen> {
           isCollapsed: true),
       cursorColor: AppTheme.base,
       maxLines: 1,
-      controller: controller.emailController,
+      controller: controller.loginEmailController,
       validator: controller.validateEmail,
     );
   }
 
   Widget passwordField() {
-    return TextFormField(
-      keyboardType: TextInputType.text,
-      obscureText: controller.showPassword ? false : true,
-      decoration: InputDecoration(
-          floatingLabelBehavior: FloatingLabelBehavior.never,
-          isDense: true,
-          filled: true,
-          fillColor: Colors.white,
-          hintText: "Password",
-          enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.base, width: 1),
-              borderRadius: BorderRadius.all(Radius.circular(6))),
-          focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.base, width: 1),
-              borderRadius: BorderRadius.all(Radius.circular(6))),
-          border: const OutlineInputBorder(
-              borderSide: BorderSide(color: AppTheme.base, width: 1),
-              borderRadius: BorderRadius.all(Radius.circular(6))),
-          suffixIcon: InkWell(
-              onTap: () {
-                controller.onChangeShowPassword();
-              },
-              child: Icon(controller.showPassword
-                  ? Icons.visibility_off
-                  : Icons.visibility)),
-          contentPadding: const EdgeInsets.all(16),
-          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
-          isCollapsed: true),
-      cursorColor: AppTheme.base,
-      maxLines: 1,
-      controller: controller.passwordController,
-      validator: controller.validatePassword,
+    return Obx(
+      () => TextFormField(
+        keyboardType: TextInputType.text,
+        obscureText: controller.showPassword.value ? false : true,
+        decoration: InputDecoration(
+            floatingLabelBehavior: FloatingLabelBehavior.never,
+            isDense: true,
+            filled: true,
+            fillColor: Colors.white,
+            hintText: "Password",
+            enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            border: const OutlineInputBorder(
+                borderSide: BorderSide(color: AppTheme.base, width: 1),
+                borderRadius: BorderRadius.all(Radius.circular(6))),
+            suffixIcon: InkWell(
+                onTap: () {
+                  controller.onChangeShowPassword();
+                },
+                child: Icon(controller.showPassword.value
+                    ? Icons.visibility_off
+                    : Icons.visibility)),
+            contentPadding: const EdgeInsets.all(16),
+            hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
+            isCollapsed: true),
+        cursorColor: AppTheme.base,
+        maxLines: 1,
+        controller: controller.loginPasswordController,
+        validator: controller.validatePassword,
+      ),
     );
   }
 
   Widget loginButton() {
-    return Row(
-      children: [
-        Expanded(
-            child: ElevatedButton(
-          onPressed: () {
-            controller.signInWithEmailAndPassword();
-          },
-          style: const ButtonStyle(
-              padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 16)),
-              backgroundColor: WidgetStatePropertyAll(AppTheme.primary),
-              elevation: WidgetStatePropertyAll(0),
-              shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))))),
-          child: const Text(
-            "Sign In",
-            style:
-                TextStyle(fontWeight: FontWeight.w500,fontSize: 16, color: AppTheme.onPrimary),
-          ),
-        )),
-      ],
+    return Obx(
+      () => Row(
+        children: [
+          Expanded(
+              child: ElevatedButton(
+            onPressed: () {
+              FocusScopeNode currentFocus = FocusScope.of(Get.context!);
+              if (!currentFocus.hasPrimaryFocus) {
+                currentFocus.unfocus();
+              }
+              if (!controller.loginLoading.value) {
+                controller.signInWithEmailAndPassword();
+              }
+            },
+            style: const ButtonStyle(
+                padding:
+                    WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 16)),
+                backgroundColor: WidgetStatePropertyAll(AppTheme.primary),
+                elevation: WidgetStatePropertyAll(0),
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(6))))),
+            child: controller.loginLoading.value
+                ? const SizedBox(
+                    height: 22.0,
+                    width: 22.0,
+                    child: CircularProgressIndicator(color: AppTheme.onPrimary),
+                  )
+                : const Text(
+                    "Sign In",
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                        color: AppTheme.onPrimary),
+                  ),
+          )),
+        ],
+      ),
     );
   }
 
@@ -196,18 +221,22 @@ class _LoginScreenState extends State<LoginScreen> {
         Expanded(
           child: ElevatedButton(
             onPressed: () {
-              controller.signInWithEmailAndPassword();
+              Get.to(() => const SignUpScreen(), transition: Transition.fadeIn);
             },
             style: const ButtonStyle(
-                padding: WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 16)),
+                padding:
+                    WidgetStatePropertyAll(EdgeInsets.symmetric(vertical: 16)),
                 backgroundColor: WidgetStatePropertyAll(AppTheme.light),
                 elevation: WidgetStatePropertyAll(0),
-                shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6)),
+                shape: WidgetStatePropertyAll(RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(6)),
                     side: BorderSide(color: AppTheme.primary)))),
             child: const Text(
               "Sign Up",
-              style:
-                  TextStyle(fontWeight: FontWeight.w500,fontSize: 16, color: AppTheme.primary),
+              style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 16,
+                  color: AppTheme.primary),
             ),
           ),
         ),
