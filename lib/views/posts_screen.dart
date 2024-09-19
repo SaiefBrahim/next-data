@@ -195,7 +195,7 @@ class PostsScreenState extends State<PostsScreen> {
       itemBuilder: (context, index) {
         Post item = postsScreenController.postsList[index];
         PostAuthor? user = postsScreenController.usersList
-            .firstWhereOrNull((e) => e.id == item.id);
+            .firstWhereOrNull((e) => e.id == item.userId);
         return PostCard(height: 120, user: user?.name, post: item);
       },
     );
