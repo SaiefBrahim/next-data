@@ -6,6 +6,6 @@
 
 ## Temps consacré au développement:
 - 17/09/2024 du 20h00 jusqu'à 00h00
-- 18/07/2024 du 20h00 jusqu'à 00h00
+- 18/09/2024 du 20h00 jusqu'à 00h00
 
 
